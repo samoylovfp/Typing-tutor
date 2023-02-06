@@ -115,6 +115,7 @@ impl yew::Component for Practice {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html!(
             <>
+            <a href="https://github.com/samoylovfp/Typing-tutor/">{"GitHub"}</a>
                 <pre>{self.render_chars()}
                 {(self.correctness.len() == self.prompt.chars().count()).then_some(
                     "\nEnter to continue\n"
