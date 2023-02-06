@@ -27,6 +27,8 @@ jobs:
         with:
           toolchain: stable
           target: wasm32-unknown-unknown
+      
+      - uses: Swatinem/rust-cache@v2
 
       - name: Install trunk
         uses: jetli/trunk-action@v0.1.0
