@@ -28,10 +28,6 @@ impl TypingErrors {
     fn account(&mut self, expected_c: char, typed_char: char) {
         let correct = expected_c == typed_char;
         let score = self.error_score.entry(expected_c).or_default();
-        let stat_score = self
-            .error_stats
-            .entry(chars_to_key(expected_c, typed_char))
-            .or_default();
         if correct {
             *score = score.saturating_sub(1);
             self.error_stats
@@ -40,6 +36,10 @@ impl TypingErrors {
                 .for_each(|(_k, v)| *v = v.saturating_sub(1));
         } else {
             *score += ERROR_SCORE_INCR;
+            let stat_score = self
+                .error_stats
+                .entry(chars_to_key(expected_c, typed_char))
+                .or_default();
             *stat_score += STAT_SCORE_INCR;
         }
         LocalStorage::set(ERROR_STORAGE_KEY, self).unwrap();
