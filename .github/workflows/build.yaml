@@ -37,7 +37,9 @@ jobs:
 
       - name: Build Release
         run: |
-          trunk build --release
+          trunk build --release --public-url=.
+          # workaround for trunk making absolute paths
+          sed -ri 's#/./#./#g' dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
