@@ -17,6 +17,7 @@ struct Practice {
     expected_chars: HashSet<char>,
     mistyped: VecDeque<(char, char)>,
     error_stats: TypingErrors,
+    mistake_on_this_line: bool
 }
 
 #[derive(Serialize, Deserialize, Default)]
@@ -111,11 +112,12 @@ impl yew::Component for Practice {
             expected_chars: default_symbols().into_iter().collect(),
             mistyped: Default::default(),
             error_stats: stats,
+            mistake_on_this_line: false
         }
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
         let all_done = self.correctness.len() == self.prompt.chars().count();
-        let all_correct = all_done && self.correctness.iter().all(|c| *c);
+        let all_correct = all_done && !self.mistake_on_this_line;
         html!(
             <>
             <a href="https://github.com/samoylovfp/Typing-tutor/">{"GitHub"}</a> <br />
@@ -144,6 +146,7 @@ impl yew::Component for Practice {
         let reset = |s: &mut Self| {
             s.prompt = generate_random_str(&s.error_stats);
             s.correctness.clear();
+            s.mistake_on_this_line = false;
         };
 
         match msg {
@@ -180,6 +183,7 @@ impl yew::Component for Practice {
                             if self.mistyped.len() > 10 {
                                 self.mistyped.pop_front();
                             }
+                            self.mistake_on_this_line = true;
                         }
                     }
                 }
