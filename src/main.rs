@@ -116,13 +116,15 @@ impl yew::Component for Practice {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html!(
             <>
-            <a href="https://github.com/samoylovfp/Typing-tutor/">{"GitHub"}</a>
+            <a href="https://github.com/samoylovfp/Typing-tutor/">{"GitHub"}</a> <br />
+                {"Type this"}
                 <pre>{self.render_chars()}
                 {(self.correctness.len() == self.prompt.chars().count()).then_some(
                     "\nEnter to continue\n"
                 )}
                 </pre>
-                {"Last mistakes:"}
+                {"Total error score "} {self.error_stats.error_score.values().copied().sum::<usize>()} <br />
+                {"Last mistakes"}
                 <pre>{
                     self.mistyped
                     .iter()
@@ -131,7 +133,7 @@ impl yew::Component for Practice {
                     .collect::<String>()
                 }</pre>
 
-                {"Error stats:"}
+                {"Error stats"}
                 <pre>{self.render_error_stats()}</pre>
             </>
         )
