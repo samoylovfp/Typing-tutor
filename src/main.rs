@@ -114,14 +114,15 @@ impl yew::Component for Practice {
         }
     }
     fn view(&self, _ctx: &Context<Self>) -> Html {
+        let all_done = self.correctness.len() == self.prompt.chars().count();
+        let all_correct = all_done && self.correctness.iter().all(|c| *c);
         html!(
             <>
             <a href="https://github.com/samoylovfp/Typing-tutor/">{"GitHub"}</a> <br />
                 {"Type this"}
                 <pre>{self.render_chars()}
-                {(self.correctness.len() == self.prompt.chars().count()).then_some(
-                    "\nEnter to continue\n"
-                )}
+                {all_correct.then_some("\nAll correct, good job!")}
+                {all_done.then_some("\nEnter to continue\n")}
                 </pre>
                 {"Total error score "} {self.error_stats.error_score.values().copied().sum::<usize>()} <br />
                 {"Last mistakes"}
