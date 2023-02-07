@@ -36,6 +36,7 @@ impl TypingErrors {
                 .for_each(|(_k, v)| *v = v.saturating_sub(1));
         } else {
             *score += ERROR_SCORE_INCR;
+            *self.error_score.entry(typed_char).or_default() += 1;
             let stat_score = self
                 .error_stats
                 .entry(chars_to_key(expected_c, typed_char))
